@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="google2b6820095aa9a2f8.html" />
+  <title>LexGames Studio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>LexGames</h1>
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#games">Games</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Welcome to LexGames</h2>
+      <p>Crafting unique and engaging games for everyone.</p>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>
+        LexGames is a game studio with a passionate team dedicated to creating fun, innovative, and memorable games.
+        Our team is passionate about storytelling, design, and bringing creative ideas to life.
+      </p>
+    </div>
+  </section>
+
+  <section id="games">
+    <div class="container">
+      <h2>Our Games</h2>
+      <div class="under-construction">
+        <p>🚧 Under Construction 🚧</p>
+        <p>We're working on something amazing! Check back soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>Email us at: <a href="mailto:contact@lexgames.com">contact@lexgames.com</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 LexGames. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Sparkle trail effect -->
+  <div id="sparkle-container"></div>
+
+  <script>
+    class Sparkle {
+      constructor(x, y) {
+        this.element = document.createElement('div');
+        this.element.className = 'sparkle';
+        this.element.style.left = x + 'px';
+        this.element.style.top = y + 'px';
+
+        // Random sparkle properties
+        this.size = Math.random() * 6 + 3;
+        this.life = 1;
+        this.fadeSpeed = Math.random() * 0.03 + 0.02;
+        this.moveX = (Math.random() - 0.5) * 1.5;
+        this.moveY = (Math.random() - 0.5) * 1.5;
+
+        this.element.style.width = this.size + 'px';
+        this.element.style.height = this.size + 'px';
+
+        document.getElementById('sparkle-container').appendChild(this.element);
+      }
+
+      update() {
+        this.life -= this.fadeSpeed;
+        this.element.style.opacity = this.life;
+        this.element.style.left = (parseFloat(this.element.style.left) + this.moveX) + 'px';
+        this.element.style.top = (parseFloat(this.element.style.top) + this.moveY) + 'px';
+
+        if (this.life <= 0) {
+          this.element.remove();
+          return false;
+        }
+        return true;
+      }
+    }
+
+    let sparkles = [];
+    let mouseX = 0;
+    let mouseY = 0;
+    let lastSparkleTime = 0;
+    const MAX_SPARKLES = 20; // Limit total sparkles
+    const SPARKLE_INTERVAL = 100; // Increase interval to 100ms
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      // Create sparkles less frequently and limit total count
+      const now = Date.now();
+      if (now - lastSparkleTime > SPARKLE_INTERVAL && sparkles.length < MAX_SPARKLES) {
+        // Create fewer sparkles for better performance
+        for (let i = 0; i < 2; i++) {
+          const offsetX = (Math.random() - 0.5) * 15;
+          const offsetY = (Math.random() - 0.5) * 15;
+          sparkles.push(new Sparkle(mouseX + offsetX, mouseY + offsetY));
+        }
+        lastSparkleTime = now;
+      }
+    });
+
+    // Animation loop with throttling
+    let animationId;
+    function animate() {
+      sparkles = sparkles.filter(sparkle => sparkle.update());
+      animationId = requestAnimationFrame(animate);
+    }
+
+    // Start animation
+    animate();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    });
+  </script>
+</body>
+
+</html>
